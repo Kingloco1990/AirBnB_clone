@@ -1,51 +1,76 @@
 #!/usr/bin/python3
-"""Defines the BaseModel class."""
-import models
+"""This module provides a class that defines all common attributes/methods
+   for other classes.
+"""
 from uuid import uuid4
 from datetime import datetime
 
 
 class BaseModel:
-    """Represents the BaseModel of the HBnB project."""
+    """
+    A parent class for common attributes and methods used by other classes.
 
-    def __init__(self, *args, **kwargs):
-        """Initialize a new BaseModel.
+    Attributes:
+        id (str): A unique identifier generated using the UUID version 4.
+        created_at (datetime): The date and time when an instance is created.
+        updated_at (datetime): The date and time when an instance is last
+                               updated.
 
-        Args:
-            *args (any): Unused.
-            **kwargs (dict): Key/value pairs of attributes.
+    Methods:
+        __init__(): Initializes a new instance with a unique ID and current
+                    timestamps.
+        save(): Updates the `updated_at` timestamp to the current date and
+                time.
+        to_dict(): Converts the object's attributes to a dictionary for
+                   serialization.
+        __str__(): Returns a string representation of the object.
+    """
+    def __init__(self):
         """
-        tform = "%Y-%m-%dT%H:%M:%S.%f"
+        Initializes a new instance of the BaseModel class.
+
+        - Sets a unique identifier ('id') using UUID version 4.
+        - Initializes 'created_at' and 'updated_at' with the
+          current date and time.
+        """
         self.id = str(uuid4())
-        self.created_at = datetime.today()
-        self.updated_at = datetime.today()
-        if len(kwargs) != 0:
-            for k, v in kwargs.items():
-                if k == "created_at" or k == "updated_at":
-                    self.__dict__[k] = datetime.strptime(v, tform)
-                else:
-                    self.__dict__[k] = v
-        else:
-            models.storage.new(self)
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
 
     def save(self):
-        """Update updated_at with the current datetime."""
-        self.updated_at = datetime.today()
-        models.storage.save()
+        """
+        Updates the 'updated_at' timestamp to the current date and time.
+
+        This method is called whenever an object is updated.
+        """
+        self.updated_at = datetime.now()
 
     def to_dict(self):
-        """Return the dictionary of the BaseModel instance.
-
-        Includes the key/value pair __class__ representing
-        the class name of the object.
         """
-        rdict = self.__dict__.copy()
-        rdict["created_at"] = self.created_at.isoformat()
-        rdict["updated_at"] = self.updated_at.isoformat()
-        rdict["__class__"] = self.__class__.__name__
-        return rdict
+        Converts the object's attributes to a dictionary for serialization.
+
+        Returns:
+            dict: A dictionary containing the object's attributes and values,
+                  suitable for serialization.
+        """
+        class_name = self.__class__.__name__
+        # Creates a separate copy of the object's attributes to avoid modifying
+        # the original object unintentionally
+        obj_dict = self.__dict__.copy()
+        # Adds the 'id', 'created_at' and 'updated_at' attributes to obj_dict
+        obj_dict['id'] = self.id
+        obj_dict['created_at'] = self.created_at.isoformat()
+        obj_dict['updated_at'] = self.updated_at.isoformat()
+        obj_dict['__class__'] = class_name
+        return obj_dict
 
     def __str__(self):
-        """Return the print/str representation of the BaseModel instance."""
-        clname = self.__class__.__name__
-        return "[{}] ({}) {}".format(clname, self.id, self.__dict__)
+        """
+        Returns a string representation of the object.
+
+        Returns:
+            str: A string containing the class name, unique ID, and attribute
+                 dictionary.
+        """
+        class_name = self.__class__.__name__
+        return f"[{class_name}] ({self.id}) {self.__dict__}"
