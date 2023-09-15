@@ -25,14 +25,27 @@ class BaseModel:
                    serialization.
         __str__(): Returns a string representation of the object.
     """
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """
         Initializes a new instance of the BaseModel class.
 
         - Sets a unique identifier ('id') using UUID version 4.
         - Initializes 'created_at' and 'updated_at' with the
           current date and time.
+
+        Args:
+            *args: Variable length positional arguments (not used here).
+            **kwargs: Variable length keyword arguments that can be provided
+                to set specific attribute values, including 'created_at' and
+                'updated_at'.
         """
+        time_format = "%Y-%m-%dT%H:%M:%S.%f"
+        if len(kwargs) != 0:
+            for key, value in kwargs.items():
+                if key == "created_at" or key == "updated_at":
+                    self.__dict__[key] = datetime.strptime(value, time_format)
+                else:
+                    self.__dict__[key] = value
         self.id = str(uuid4())
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
