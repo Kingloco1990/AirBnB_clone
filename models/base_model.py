@@ -39,16 +39,16 @@ class BaseModel:
                 to set specific attribute values, including 'created_at' and
                 'updated_at'.
         """
+        time_format = "%Y-%m-%dT%H:%M:%S.%f"
+        self.id = str(uuid4())
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
         if len(kwargs) != 0:
             for key, value in kwargs.items():
                 if key == "created_at" or key == "updated_at":
                     self.__dict__[key] = datetime.strptime(value, time_format)
                 else:
                     self.__dict__[key] = value
-        time_format = "%Y-%m-%dT%H:%M:%S.%f"
-        self.id = str(uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
 
     def save(self):
         """
