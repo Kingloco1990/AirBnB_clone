@@ -43,7 +43,6 @@ class BaseModel:
         self.id = str(uuid4())
         self.created_at = datetime.now()
         self.updated_at = self.created_at
-        models.storage.new(self)
         if len(kwargs) != 0:
             for key, value in kwargs.items():
                 if key != "__class__":
@@ -53,6 +52,7 @@ class BaseModel:
                         setattr(self, key, value)
                     else:
                         setattr(self, key, value)
+        models.storage.new(self)
 
     def __str__(self):
         """
