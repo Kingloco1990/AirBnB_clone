@@ -58,7 +58,6 @@ class BaseModel:
         This method is called whenever an object is updated.
         """
         self.updated_at = datetime.now()
-        models.storage.new(self)
         models.storage.save()
 
     def to_dict(self):
