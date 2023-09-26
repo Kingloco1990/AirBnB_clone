@@ -40,16 +40,29 @@ class BaseModel:
                 to set specific attribute values, including 'created_at' and
                 'updated_at'.
         """
-        time_format = "%Y-%m-%dT%H:%M:%S.%f"
-        self.id = str(uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
         if len(kwargs) != 0:
             for key, value in kwargs.items():
-                if key == "created_at" or key == "updated_at":
-                    self.__dict__[key] = datetime.strptime(value, time_format)
-                else:
-                    self.__dict__[key] = value
+                if key != "__class__":
+                    if key == "created_at" or key == "updated_at":
+                        value = datetime.strptime(
+                            value, "%Y-%m-%dT%H:%M:%S.%f")
+                        setattr(self, key, value)
+        else:
+            self.id = str(uuid4())
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
+            models.storage.new(self)
+
+    def __str__(self):
+        """
+        Returns a string representation of the object.
+
+        Returns:
+            str: A string containing the class name, unique ID, and attribute
+                 dictionary.
+        """
+        class_name = self.__class__.__name__
+        return f"[{class_name}] ({self.id}) {self.__dict__}"
 
     def save(self):
         """
@@ -78,14 +91,3 @@ class BaseModel:
         obj_dict['updated_at'] = self.updated_at.isoformat()
         obj_dict['__class__'] = class_name
         return obj_dict
-
-    def __str__(self):
-        """
-        Returns a string representation of the object.
-
-        Returns:
-            str: A string containing the class name, unique ID, and attribute
-                 dictionary.
-        """
-        class_name = self.__class__.__name__
-        return f"[{class_name}] ({self.id}) {self.__dict__}"
