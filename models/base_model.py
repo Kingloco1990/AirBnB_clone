@@ -35,11 +35,15 @@ class BaseModel:
           current date and time.
 
         Args:
-            *args: Variable length positional arguments (not used here).
-            **kwargs: Variable length keyword arguments that can be provided
-                to set specific attribute values, including 'created_at' and
-                'updated_at'.
+            *args(tuple): Variable length positional arguments (not used here).
+            **kwargs(dict): Variable length keyword arguments that can be
+                provided to set specific attribute values, including
+                'created_at' and 'updated_at'.
         """
+        self.id = str(uuid4())
+        self.created_at = datetime.now()
+        self.updated_at = self.created_at
+        models.storage.new(self)
         if len(kwargs) != 0:
             for key, value in kwargs.items():
                 if key != "__class__":
@@ -47,11 +51,6 @@ class BaseModel:
                         value = datetime.strptime(
                             value, "%Y-%m-%dT%H:%M:%S.%f")
                         setattr(self, key, value)
-        else:
-            self.id = str(uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = self.created_at
-            models.storage.new(self)
 
     def __str__(self):
         """
