@@ -66,6 +66,6 @@ class FileStorage:
                 for obj in json_file.values():
                     class_name = obj["__class__"]
                     del obj["__class__"]
-                    self.new(eval('{}({})'.format(class_name, '**obj_dict')))
+                    self.new(eval('{}({})'.format(class_name, '**obj')))
         except FileNotFoundError:
             pass
