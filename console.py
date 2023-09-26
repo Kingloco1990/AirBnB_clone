@@ -27,6 +27,10 @@ class HBNBCommand(cmd.Cmd):
         print()
         return True
 
+    def emptyline(self):
+        """Override the default behavior for empty input lines"""
+        pass
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
