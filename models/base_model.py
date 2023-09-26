@@ -51,6 +51,8 @@ class BaseModel:
                         value = datetime.strptime(
                             value, "%Y-%m-%dT%H:%M:%S.%f")
                         setattr(self, key, value)
+                    else:
+                        setattr(self, key, value)
 
     def __str__(self):
         """
