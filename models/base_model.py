@@ -81,13 +81,8 @@ class BaseModel:
             dict: A dictionary containing the object's attributes and values,
                   suitable for serialization.
         """
-        class_name = self.__class__.__name__
-        # Creates a separate copy of the object's attributes to avoid modifying
-        # the original object unintentionally
-        obj_dict = self.__dict__.copy()
-        # Adds the 'id', 'created_at' and 'updated_at' attributes to obj_dict
-        obj_dict['id'] = self.id
-        obj_dict['created_at'] = self.created_at.isoformat()
-        obj_dict['updated_at'] = self.updated_at.isoformat()
-        obj_dict['__class__'] = class_name
+        obj_dict = dict(self.__dict__)
+        obj_dict['__class__'] = self.__class__.__name__
+        obj_dict['created_at'] = obj_dict['created_at'].isoformat()
+        obj_dict['updated_at'] = obj_dict['updated_at'].isoformat()
         return obj_dict
