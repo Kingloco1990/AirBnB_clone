@@ -81,7 +81,7 @@ class HBNBCommand(cmd.Cmd):
         elif args[0] not in self.classes:
             print("** class doesn't exist **")
         elif len(args) == 1:
-            print("** instance is missing **")
+            print("** instance id missing **")
         else:
             objs = models.storage.all()
             key = '{}.{}'.format(args[0], args[1])
