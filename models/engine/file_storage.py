@@ -27,7 +27,7 @@ class FileStorage:
 
     def all(self):
         """
-        Retrieves all serialized objects.
+        Retrieves/returns all serialized objects.
 
         Returns:
             dict: A dictionary containing all serialized objects.
@@ -36,7 +36,7 @@ class FileStorage:
 
     def new(self, obj):
         """
-        Adds a new serialized/deserialized object to the storage.
+        Adds a new serialized/deserialized object to storage.
 
         Args:
             obj (BaseModel): The object to be serialized and added.
