@@ -5,7 +5,8 @@ from models.base_model import BaseModel
 
 
 class User(BaseModel):
-    """User class represents users in the application.
+    """
+    User class represents users in the application.
 
     Args:
         BaseModel (class): The base class for all models.
