@@ -4,9 +4,14 @@
 """
 import cmd
 import shlex
+import models
 from models.base_model import BaseModel
 from models.user import User
-import models
+from models.state import State
+from models.city import City
+from models.place import Place
+from models.amenity import Amenity
+from models.review import Review
 
 
 def parse(line):
@@ -40,7 +45,15 @@ class HBNBCommand(cmd.Cmd):
                                id by adding or updating an attribute.
     """
     prompt = "(hbnb) "
-    classes = ['BaseModel', 'User']
+    classes = [
+        'BaseModel',
+        'User',
+        'Place',
+        'State',
+        'City',
+        'Amenity',
+        'Review'
+        ]
 
     def do_quit(self, line):
         """Quit command to exit the program."""
