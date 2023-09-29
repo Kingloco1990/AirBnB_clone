@@ -196,6 +196,25 @@ class HBNBCommand(cmd.Cmd):
             except KeyError:
                 print("** no instance found **")
 
+    def do_all(self, arg):
+        """
+        Display string representations of all instances of a given class.
+        If no class is specified, displays all instantiated objects.
+
+        Usage: all or all <class> or <class>.all()
+        """
+        objs = models.storage.all()
+        args = parse(arg)
+        if len(args) >= 1:
+            if args[0] not in self.classes:
+                print("** class doesn't exist **")
+            else:
+                obj_list = []
+                for key, obj in objs.items():
+                    if key.startswith(args[0]):
+                        obj_list.append(obj.__str__())
+                print(obj)
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
