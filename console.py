@@ -197,23 +197,21 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
 
     def do_all(self, arg):
-        """
+        """Usage: all or all <class> or <class>.all()
         Display string representations of all instances of a given class.
-        If no class is specified, displays all instantiated objects.
-
-        Usage: all or all <class> or <class>.all()
-        """
+        If no class is specified, displays all instantiated objects."""
         objs = models.storage.all()
-        args = parse(arg)
-        if len(args) >= 1:
-            if args[0] not in self.classes:
-                print("** class doesn't exist **")
-            else:
-                obj_list = []
-                for obj in objs.values():
-                    if args[0] == obj.__class__.__name__:
-                        obj_list.append(obj.__str__())
-                print(obj)
+        argl = parse(arg)
+        if len(argl) > 0 and argl[0] not in HBNBCommand.__classes:
+            print("** class doesn't exist **")
+        else:
+            objl = []
+            for obj in objs.values():
+                if len(argl) > 0 and argl[0] == obj.__class__.__name__:
+                    objl.append(obj.__str__())
+                elif len(argl) == 0:
+                    objl.append(obj.__str__())
+            print(objl)
 
 
 if __name__ == '__main__':
