@@ -64,6 +64,14 @@ class HBNBCommand(cmd.Cmd):
         print()
         return True
 
+    def emptyline(self):
+        """
+        Overrides the default behavior for an empty line.
+        In the command interpreter, this ensures that no command is
+        executed when an empty line is entered.
+        """
+        pass
+
     def do_create(self, line):
         """
         Create a new instance of BaseModel, save it to the JSON file,
