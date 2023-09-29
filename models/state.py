@@ -6,7 +6,7 @@ from models.base_model import BaseModel
 
 class State(BaseModel):
     """
-    Represent a state.
+    State class for representing states with a name attribute.
 
     Args:
         BaseModel (class): The base class for all models.
