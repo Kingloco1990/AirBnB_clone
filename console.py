@@ -210,8 +210,8 @@ class HBNBCommand(cmd.Cmd):
                 print("** class doesn't exist **")
             else:
                 obj_list = []
-                for key, obj in objs.items():
-                    if key.startswith(args[0]):
+                for obj in objs.values():
+                    if args[0] == obj.__class__.__name__:
                         obj_list.append(obj.__str__())
                 print(obj)
 
