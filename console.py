@@ -4,6 +4,7 @@
 """
 import cmd
 import shlex
+import re
 import models
 from models.base_model import BaseModel
 from models.user import User
@@ -54,6 +55,26 @@ class HBNBCommand(cmd.Cmd):
         'Amenity',
         'Review'
         ]
+
+    def default(self, line):
+        """Default behavior for cmd module when input is invalid"""
+        argdict = {
+            "all": self.do_all,
+            "show": self.do_show,
+            "destroy": self.do_destroy,
+            "update": self.do_update
+        }
+        match = re.search(r"\.", line)
+        if match is not None:
+            arg = [line[:match.span()[0]], line[match.span()[1]:]]
+            match = re.search(r"\((.*?)\)", arg[1])
+            if match is not None:
+                command = [arg[1][:match.span()[0]], match.group()[1:-1]]
+                if command[0] in argdict.keys():
+                    call = "{} {}".format(arg[0], command[1])
+                    return argdict[command[0]](call)
+        print("*** Unknown syntax: {}".format(line))
+        return False
 
     def do_quit(self, line):
         """Quit command to exit the program."""
@@ -143,7 +164,7 @@ class HBNBCommand(cmd.Cmd):
         class name. When class name is not specified, it prints all
         instantiated objects.
 
-        Usage: all <class> or all
+        Usage: all or all <class> or <class>.all()
         """
         objs = models.storage.all()
         args = parse(line)
@@ -195,23 +216,6 @@ class HBNBCommand(cmd.Cmd):
                     obj.save()
             except KeyError:
                 print("** no instance found **")
-
-    def do_all(self, arg):
-        """Usage: all or all <class> or <class>.all()
-        Display string representations of all instances of a given class.
-        If no class is specified, displays all instantiated objects."""
-        objs = models.storage.all()
-        argl = parse(arg)
-        if len(argl) > 0 and argl[0] not in HBNBCommand.__classes:
-            print("** class doesn't exist **")
-        else:
-            objl = []
-            for obj in objs.values():
-                if len(argl) > 0 and argl[0] == obj.__class__.__name__:
-                    objl.append(obj.__str__())
-                elif len(argl) == 0:
-                    objl.append(obj.__str__())
-            print(objl)
 
 
 if __name__ == '__main__':
