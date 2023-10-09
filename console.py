@@ -217,6 +217,17 @@ class HBNBCommand(cmd.Cmd):
             except KeyError:
                 print("** no instance found **")
 
+    def do_count(self, line):
+        """Usage: count <class> or <class>.count()
+        Retrieve the number of instances of a given class."""
+        objs = models.storage.all()
+        args = parse(line)
+        count = 0
+        for obj in objs.values():
+            if args[0] == obj.__class__.__name__:
+                count += 1
+        print(count)
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
