@@ -62,6 +62,7 @@ class HBNBCommand(cmd.Cmd):
             "all": self.do_all,
             "show": self.do_show,
             "destroy": self.do_destroy,
+            "count": self.do_count,
             "update": self.do_update
         }
         match = re.search(r"\.", line)
