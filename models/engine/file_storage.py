@@ -15,8 +15,8 @@ from models.review import Review
 
 class FileStorage:
     """
-    This class provides methods for serializing instances to a JSON file
-    and deserializing JSON files to instances.
+    This module contains a class that provides methods for serializing
+    instances to a JSON file and deserializing JSON files to instances.
 
     Attributes:
         __file_path (str): The path to the JSON file where data is stored.
