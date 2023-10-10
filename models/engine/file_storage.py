@@ -20,7 +20,7 @@ class FileStorage:
 
     Attributes:
         __file_path (str): The path to the JSON file where data is stored.
-        __objects (dict): A dictionary to store serialized objects.
+        __objects (dict): A dictionary to store objects.
 
     Methods:
         all(self): Returns all objects in storage.
