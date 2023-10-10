@@ -26,7 +26,7 @@ class FileStorage:
         all(self): Returns all objects in storage.
         new(self, obj): Adds a new object to storage.
         save(self): Serializes objects and saves them to the JSON file.
-        reload(self): Deserializes string representations saved in the
+        reload(self): Deserializes string representations saved to the
                       JSON file into objects and then into storage.
     """
     __file_path = "file.json"  # Default JSON file path
@@ -62,7 +62,7 @@ class FileStorage:
 
     def reload(self):
         """
-        Deserializes string representations saved in the JSON file into
+        Deserializes string representations saved to the JSON file into
         objects and then into storage.
         """
         try:
