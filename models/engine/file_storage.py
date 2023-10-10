@@ -62,7 +62,7 @@ class FileStorage:
 
     def reload(self):
         """
-        Deserializes string representations saved in the JSON file into 
+        Deserializes string representations saved in the JSON file into
         objects and then into storage.
         """
         try:
