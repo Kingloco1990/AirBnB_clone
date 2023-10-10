@@ -57,7 +57,17 @@ class HBNBCommand(cmd.Cmd):
         ]
 
     def default(self, line):
-        """Default behavior for cmd module when input is invalid"""
+        """
+        Handle input that doesn't match any explicit command pattern.
+
+        Args:
+            line (str): The input line provided by the user.
+
+        Returns:
+            bool: False if the input doesn't match any known command pattern,
+            otherwise, it returns the result of executing the recognized
+            command.
+        """
         argdict = {
             "all": self.do_all,
             "show": self.do_show,
@@ -99,8 +109,8 @@ class HBNBCommand(cmd.Cmd):
         Create a new instance of BaseModel, save it to the JSON file,
         and print its id.
 
-        Usage: create <class> or
-               create <class> <key 1>=<value 2> <key 2>=<value 2> ...
+        Usage: create <class name> or
+               create <class name> <key 1>=<value 2> <key 2>=<value 2> ...
         """
         args = parse(line)
         if len(args) == 0:
@@ -117,7 +127,7 @@ class HBNBCommand(cmd.Cmd):
         Prints the string representation of an instance based
         on the class name and id.
 
-        Usage: show <class> <id>
+        Usage: show <class name> <id>
         """
         args = parse(line)
         if len(args) == 0:
@@ -127,10 +137,10 @@ class HBNBCommand(cmd.Cmd):
         elif len(args) == 1:
             print("** instance id missing **")
         else:
-            objs = models.storage.all()
+            objs_dict = models.storage.all()
             key = '{}.{}'.format(args[0], args[1])
             try:
-                obj = objs[key]
+                obj = objs_dict[key]
                 print(obj)
             except KeyError:
                 print("** no instance found **")
@@ -139,7 +149,7 @@ class HBNBCommand(cmd.Cmd):
         """
         Deletes an instance based on the class name and id.
 
-        Usage: destroy <class> <id>
+        Usage: destroy <class name> <id>
         """
         args = parse(line)
         if len(args) == 0:
@@ -149,11 +159,11 @@ class HBNBCommand(cmd.Cmd):
         elif len(args) == 1:
             print("** instance id missing **")
         else:
-            objs = models.storage.all()
+            objs_dict = models.storage.all()
             key = '{}.{}'.format(args[0], args[1])
             try:
-                obj = objs[key]
-                objs.pop(key)
+                obj = objs_dict[key]
+                objs_dict.pop(key)
                 del obj
                 models.storage.save()
             except KeyError:
@@ -165,21 +175,21 @@ class HBNBCommand(cmd.Cmd):
         class name. When class name is not specified, it prints all
         instantiated objects.
 
-        Usage: all or all <class> or <class>.all()
+        Usage: all or all <class name> or <class name>.all()
         """
-        objs = models.storage.all()
+        objs_dict = models.storage.all()
         args = parse(line)
         obj_list = []
         if len(args) >= 1:
             if args[0] not in self.classes:
                 print("** class doesn't exist **")
             else:
-                for key, obj in objs.items():
+                for key, obj in objs_dict.items():
                     if key.startswith(args[0]):
                         obj_list.append(obj.__str__())
                 print(obj_list)
         else:
-            for obj in objs.values():
+            for obj in objs_dict.values():
                 obj_list.append(obj.__str__())
             print(obj_list)
 
@@ -188,16 +198,23 @@ class HBNBCommand(cmd.Cmd):
         Updates an instance based on the class name and id by adding
         or updating an attribute.
 
-        usage: <class name> <id> <attribute name> "<attribute value>"
+        usage: update <class name> <id> <attribute name> "<attribute value>"
+               or
+               <class>.update(<id>, <attribute_name>, <attribute_value>)
+               or
+               <class>.update(<id>, <dictionary>)
         """
         objs = models.storage.all()
         args = parse(line)
         if len(args) == 0:
             print("** class name missing **")
+            return False
         elif args[0] not in self.classes:
             print("** class doesn't exist **")
+            return False
         elif len(args) == 1:
             print("** instance id missing **")
+            return False
         else:
             key = '{}.{}'.format(args[0], args[1])
             try:
