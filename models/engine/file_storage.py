@@ -1,7 +1,7 @@
 #!/usr/bin/python3
-""" This module contains a class with methods that
-    serializes a instances to a JSON file and deserializes JSON
-    file to instances
+""" This module contains a class with methods that serializes instances to a
+    JSON file and deserializes string representations saved to a JSON file to
+    instances
 """
 import json
 from models.base_model import BaseModel
