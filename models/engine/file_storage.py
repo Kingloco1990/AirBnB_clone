@@ -23,29 +23,27 @@ class FileStorage:
         __objects (dict): A dictionary to store serialized objects.
 
     Methods:
-        all(self): Retrieves all serialized objects.
-        new(self, obj): Adds a new serialized object to the storage.
-        save(self): Serializes and saves objects to the JSON file.
-        reload(self): Deserializes objects from the JSON file into storage.
+        all(self): Returns all objects in storage.
+        new(self, obj): Adds a new object to storage.
+        save(self): Serializes objects and saves them to the JSON file.
+        reload(self): Deserializes string representations saved in the
+                      JSON file into objects and then into storage.
     """
     __file_path = "file.json"  # Default JSON file path
-    __objects = {}  # Dictionary to store serialized objects
+    __objects = {}  # Dictionary to store objects
 
     def all(self):
         """
-        Retrieves/returns all serialized objects.
-
-        Returns:
-            dict: A dictionary containing all serialized objects.
+        Returns all objects in storage.
         """
         return FileStorage.__objects
 
     def new(self, obj):
         """
-        Adds a new serialized/deserialized object to storage.
+        Adds a new object to storage.
 
         Args:
-            obj (BaseModel): The object to be serialized and added.
+            obj (BaseModel): The object to be added.
         """
         if obj:
             key = f"{obj.__class__.__name__}.{obj.id}"
@@ -53,7 +51,7 @@ class FileStorage:
 
     def save(self):
         """
-        Serializes and saves objects to the JSON file.
+        Serializes objects and saves them to the JSON file.
         """
         with open(FileStorage.__file_path, 'w', encoding="utf-8") as file:
             obj_dict = {
@@ -64,7 +62,8 @@ class FileStorage:
 
     def reload(self):
         """
-        Deserializes objects from the JSON file into storage.
+        Deserializes string representations saved in the JSON file into 
+        objects and then into storage.
         """
         try:
             with open(FileStorage.__file_path, 'r', encoding="utf-8") as file:
