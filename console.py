@@ -127,7 +127,7 @@ class HBNBCommand(cmd.Cmd):
         Prints the string representation of an instance based
         on the class name and id.
 
-        Usage: show <class name> <id>
+        Usage: show <class name> <id> or <class name>.show(<id>)
         """
         args = parse(line)
         if len(args) == 0:
@@ -149,7 +149,7 @@ class HBNBCommand(cmd.Cmd):
         """
         Deletes an instance based on the class name and id.
 
-        Usage: destroy <class name> <id>
+        Usage: destroy <class name> <id> or <class name>.destroy(<id>)
         """
         args = parse(line)
         if len(args) == 0:
@@ -236,12 +236,15 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
 
     def do_count(self, line):
-        """Usage: count <class> or <class>.count()
-        Retrieve the number of instances of a given class."""
-        objs = models.storage.all()
+        """
+        Retrieves the number of instances of a given class.
+
+        Usage: <class name>.count()
+        """
+        objs_dict = models.storage.all()
         args = parse(line)
         count = 0
-        for obj in objs.values():
+        for obj in objs_dict.values():
             if args[0] == obj.__class__.__name__:
                 count += 1
         print(count)
