@@ -226,8 +226,9 @@ class HBNBCommand(cmd.Cmd):
                 if len(args) == 2:
                     print("** attribute name missing **")
                 elif len(args) == 3:
-                    print("** value missing **")
-                else:
+                    if type(eval(args[2])) != dict:
+                        print("** value missing **")
+                elif len(args) == 4:
                     try:
                         # Convert the attribute (fourth argument) value to
                         # the appropriate data type
@@ -235,9 +236,13 @@ class HBNBCommand(cmd.Cmd):
                     except (SyntaxError, NameError):
                         args[3] = "'{}'".format(args[3])
                     setattr(obj, args[2], eval(args[3]))
-                    obj.save()
+                else:
+                    if type(eval(args[2])) == dict:
+                        for key, value in eval(args[2]).items():
+                            setattr(obj, key, eval(value))
             except KeyError:
                 print("** no instance found **")
+        obj.save()
 
     def do_count(self, line):
         """
