@@ -213,36 +213,43 @@ class HBNBCommand(cmd.Cmd):
         """
         objs_dict = models.storage.all()
         args = parse(line)
+
         if len(args) == 0:
             print("** class name missing **")
-        elif args[0] not in self.classes:
+        if args[0] not in self.__classes:
             print("** class doesn't exist **")
-        elif len(args) == 1:
+        if len(args) == 1:
             print("** instance id missing **")
-        else:
-            key = '{}.{}'.format(args[0], args[1])
+        if "{}.{}".format(args[0], args[1]) not in objs_dict.keys():
+            print("** no instance found **")
+        if len(args) == 2:
+            print("** attribute name missing **")
+        if len(args) == 3:
             try:
-                obj = objs_dict[key]
-                if len(args) == 2:
-                    print("** attribute name missing **")
-                elif len(args) == 3:
-                    if type(eval(args[2])) != dict:
-                        print("** value missing **")
-                elif len(args) == 4:
-                    try:
-                        # Convert the attribute (fourth argument) value to
-                        # the appropriate data type
-                        eval(args[3])
-                    except (SyntaxError, NameError):
-                        args[3] = "'{}'".format(args[3])
-                    setattr(obj, args[2], eval(args[3]))
+                type(eval(args[2])) != dict
+            except NameError:
+                print("** value missing **")
+
+        if len(args) == 4:
+            obj = objs_dict["{}.{}".format(args[0], args[1])]
+            if args[2] in obj.__class__.__dict__.keys():
+                value_type = type(obj.__class__.__dict__[args[2]])
+                obj.__dict__[args[2]] = value_type(args[3])
+            else:
+                obj.__dict__[args[2]] = args[3]
+
+        elif type(eval(args[2])) == dict:
+            obj = objs_dict["{}.{}".format(args[0], args[1])]
+            for key, value in eval(args[2]).items():
+                if (
+                    key in obj.__class__.__dict__.keys() and
+                        type(obj.__class__.__dict__[key]) in {str, int, float}
+                        ):
+                    value_type = type(obj.__class__.__dict__[key])
+                    obj.__dict__[key] = value_type(value)
                 else:
-                    if type(eval(args[2])) == dict:
-                        for key, value in eval(args[2]).items():
-                            setattr(obj, key, eval(value))
-            except KeyError:
-                print("** no instance found **")
-        obj.save()
+                    obj.__dict__[key] = value
+        models.storage.save()
 
     def do_count(self, line):
         """
