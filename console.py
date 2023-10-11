@@ -216,19 +216,25 @@ class HBNBCommand(cmd.Cmd):
 
         if len(args) == 0:
             print("** class name missing **")
+            return False
         if args[0] not in self.__classes:
             print("** class doesn't exist **")
+            return False
         if len(args) == 1:
             print("** instance id missing **")
+            return False
         if "{}.{}".format(args[0], args[1]) not in objs_dict.keys():
             print("** no instance found **")
+            return False
         if len(args) == 2:
             print("** attribute name missing **")
+            return False
         if len(args) == 3:
             try:
                 type(eval(args[2])) != dict
             except NameError:
                 print("** value missing **")
+                return False
 
         if len(args) == 4:
             obj = objs_dict["{}.{}".format(args[0], args[1])]
