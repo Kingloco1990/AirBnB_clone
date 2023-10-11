@@ -19,7 +19,14 @@ def parse(line):
     """Parses an input string, and returns a list of tokens
        based on shell-like syntax.
     """
-    return shlex.split(line)
+    curly_braces = re.search(r"\{(.*?)\}", line)
+    if curly_braces is None:
+        return [i.strip(",") for i in shlex.split(line)]
+    else:
+        token_list = shlex.split(line[:curly_braces.span()[0]])
+        cleaned_tokens = [i.strip(",") for i in token_list]
+        cleaned_tokens.append(curly_braces.group())
+        return cleaned_tokens
 
 
 class HBNBCommand(cmd.Cmd):
@@ -200,25 +207,22 @@ class HBNBCommand(cmd.Cmd):
 
         usage: update <class name> <id> <attribute name> "<attribute value>"
                or
-               <class>.update(<id>, <attribute_name>, <attribute_value>)
+               <class name>.update(<id>, <attribute_name>, <attribute_value>)
                or
-               <class>.update(<id>, <dictionary>)
+               <class name>.update(<id>, <dictionary>)
         """
-        objs = models.storage.all()
+        objs_dict = models.storage.all()
         args = parse(line)
         if len(args) == 0:
             print("** class name missing **")
-            return False
         elif args[0] not in self.classes:
             print("** class doesn't exist **")
-            return False
         elif len(args) == 1:
             print("** instance id missing **")
-            return False
         else:
             key = '{}.{}'.format(args[0], args[1])
             try:
-                obj = objs[key]
+                obj = objs_dict[key]
                 if len(args) == 2:
                     print("** attribute name missing **")
                 elif len(args) == 3:
