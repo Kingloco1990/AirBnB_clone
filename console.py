@@ -20,8 +20,15 @@ def parse(line):
        based on shell-like syntax.
     """
     curly_braces = re.search(r"\{(.*?)\}", line)
+    square_brackets = re.search(r"\[(.*?)\]", line)
     if curly_braces is None:
-        return [i.strip(",") for i in shlex.split(line)]
+        if square_brackets is None:
+            return [i.strip(",") for i in shlex.split(line)]
+        else:
+            token_list = shlex.split(line[:square_brackets.span()[0]])
+            cleaned_tokens = [i.strip(",") for i in token_list]
+            cleaned_tokens.append(square_brackets.group())
+            return cleaned_tokens
     else:
         token_list = shlex.split(line[:curly_braces.span()[0]])
         cleaned_tokens = [i.strip(",") for i in token_list]
