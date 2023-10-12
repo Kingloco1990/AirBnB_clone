@@ -252,7 +252,7 @@ class HBNBCommand(cmd.Cmd):
                             obj.save()
                         else:
                             print("** value missing **")
-                    except (SyntaxError):
+                    except (SyntaxError, NameError):
                         print("** value missing **")
                 else:
                     try:
@@ -281,5 +281,3 @@ class HBNBCommand(cmd.Cmd):
         print(count)
 
 
-if __name__ == '__main__':
-    HBNBCommand().cmdloop()
