@@ -6,12 +6,13 @@ Unittest classes:
     TestBaseModel_save
     TestBaseModel_to_dict
 """
-import os
-import models
+
 import unittest
+import os
+from models.base_model import BaseModel
+from models import storage
 from datetime import datetime
 from time import sleep
-from models.base_model import BaseModel
 
 
 class TestBaseModel_instantiation(unittest.TestCase):
@@ -21,7 +22,7 @@ class TestBaseModel_instantiation(unittest.TestCase):
         self.assertEqual(BaseModel, type(BaseModel()))
 
     def test_new_instance_stored_in_objects(self):
-        self.assertIn(BaseModel(), models.storage.all().values())
+        self.assertIn(BaseModel(), storage.all().values())
 
     def test_id_is_public_str(self):
         self.assertEqual(str, type(BaseModel().id))
