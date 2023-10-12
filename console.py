@@ -214,20 +214,6 @@ class HBNBCommand(cmd.Cmd):
         """
         objs_dict = models.storage.all()
         args = parse(line)
-
-    def do_update(self, line):
-        """
-        Updates an instance based on the class name and id by adding
-        or updating an attribute.
-
-        usage: update <class name> <id> <attribute name> "<attribute value>"
-               or
-               <class name>.update(<id>, <attribute_name>, <attribute_value>)
-               or
-               <class name>.update(<id>, <dictionary>)
-        """
-        objs_dict = models.storage.all()
-        args = parse(line)
         if len(args) == 0:
             print("** class name missing **")
         elif args[0] not in self.classes:
@@ -279,5 +265,3 @@ class HBNBCommand(cmd.Cmd):
             if args[0] == obj.__class__.__name__:
                 count += 1
         print(count)
-
-
