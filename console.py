@@ -22,13 +22,7 @@ def parse(line):
     curly_braces = re.search(r"\{(.*?)\}", line)
     square_brackets = re.search(r"\[(.*?)\]", line)
     if curly_braces is None:
-        if square_brackets is None:
-            return [i.strip(",") for i in shlex.split(line)]
-        else:
-            token_list = shlex.split(line[:square_brackets.span()[0]])
-            cleaned_tokens = [i.strip(",") for i in token_list]
-            cleaned_tokens.append(square_brackets.group())
-            return cleaned_tokens
+        return [i.strip(",") for i in shlex.split(line)]
     else:
         token_list = shlex.split(line[:curly_braces.span()[0]])
         cleaned_tokens = [i.strip(",") for i in token_list]
@@ -240,26 +234,36 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
         elif len(args) == 1:
             print("** instance id missing **")
-        else:
-            key = '{}.{}'.format(args[0], args[1])
+        elif len(args) == 2:
+            print("** attribute name missing **")
+        key = '{}.{}'.format(args[0], args[1])
+        if key not in objs_dict.keys():
+            print("** no instance found **")
+        elif len(args) == 3:
+            obj = objs_dict[key]
             try:
-                obj = objs_dict[key]
-                if len(args) == 2:
-                    print("** attribute name missing **")
-                elif len(args) == 3:
-                    if eval(args[2]) != dict:
-                        print("** value missing **")
-                else:
-                    try:
-                        # Convert the attribute (fourth argument) value to
-                        # the appropriate data type
-                        eval(args[3])
-                    except (SyntaxError, NameError):
-                        args[3] = "'{}'".format(args[3])
-                    setattr(obj, args[2], eval(args[3]))
+                result = eval(args[2])
+                if isinstance(result, dict):
+                    for k, v in result.items():
+                        if k in obj.__class__.__dict__.keys():
+                            setattr(obj, k, v)
+                        else:
+                            obj.__dict__[k] = v
                     obj.save()
-            except KeyError:
-                print("** no instance found **")
+                else:
+                    print("** value missing **")
+            except (SyntaxError):
+                print("** value missing **")
+        else:
+            obj = objs_dict[key]
+            try:
+                # Convert the attribute (fourth argument) value to
+                # the appropriate data type
+                eval(args[3])
+            except (SyntaxError, NameError):
+                args[3] = "'{}'".format(args[3])
+                setattr(obj, args[2], eval(args[3]))
+                obj.save()
 
     def do_count(self, line):
         """
