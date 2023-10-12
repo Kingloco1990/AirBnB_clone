@@ -258,9 +258,12 @@ class HBNBCommand(cmd.Cmd):
             if len(args) == 4:
                 obj = objs_dict[key]
                 if args[2] in obj.__class__.__dict__.keys():
-                    result = eval(args[2])
+                    attribute_type = type(obj.__class__.__dict__[args[2]])
+                    result = attribute_type[args[3]]
                     setattr(obj, args[2], result)
-            obj.save()
+                else:
+                    obj.__dict__[args[2]] = args[3]
+                obj.save()
 
     def do_count(self, line):
         """
