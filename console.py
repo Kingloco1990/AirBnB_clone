@@ -231,7 +231,7 @@ class HBNBCommand(cmd.Cmd):
                         result = eval(args[2])
                         if isinstance(result, dict):
                             for k, v in result.items():
-                                if k in obj.__class__.__dict__.keys():
+                                if k in obj.__dict__.keys():
                                     setattr(obj, k, v)
                                 else:
                                     obj.__dict__[k] = v
@@ -265,3 +265,7 @@ class HBNBCommand(cmd.Cmd):
             if args[0] == obj.__class__.__name__:
                 count += 1
         print(count)
+
+
+if __name__ == "__main__":
+    HBNBCommand().cmdloop()
