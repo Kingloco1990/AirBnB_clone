@@ -234,33 +234,37 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
         elif len(args) == 1:
             print("** instance id missing **")
-        elif len(args) == 2:
-            print("** attribute name missing **")
-        key = '{}.{}'.format(args[0], args[1])
-        if key not in objs_dict.keys():
-            print("** no instance found **")
-        elif len(args) == 3:
-            obj = objs_dict[key]
-            try:
-                result = eval(args[2])
-                if isinstance(result, dict):
-                    for k, v in result.items():
-                        if k in obj.__class__.__dict__.keys():
-                            setattr(obj, k, v)
-                        else:
-                            obj.__dict__[k] = v
-                    obj.save()
-                else:
-                    print("** value missing **")
-            except (SyntaxError):
-                print("** value missing **")
         else:
+            key = '{}.{}'.format(args[0], args[1])
             try:
-                eval(args[3])
-            except (NameError, SyntaxError):
-                args[3] = "'{}'".format(args[3])
-                setattr(obj, args[2], eval(args[3]))
-                obj.save()
+                obj = objs_dict[key]
+                if len(args) == 2:
+                    print("** attribute name missing **")
+                elif len(args) == 3:
+                    try:
+                        result = eval(args[2])
+                        if isinstance(result, dict):
+                            for k, v in result.items():
+                                if k in obj.__class__.__dict__.keys():
+                                    setattr(obj, k, v)
+                                else:
+                                    obj.__dict__[k] = v
+                            obj.save()
+                        else:
+                            print("** value missing **")
+                    except (SyntaxError):
+                        print("** value missing **")
+                else:
+                    try:
+                        # Convert the attribute (fourth argument) value to
+                        # the appropriate data type
+                        eval(args[3])
+                    except (SyntaxError, NameError):
+                        args[3] = "'{}'".format(args[3])
+                    setattr(obj, args[2], eval(args[3]))
+                    obj.save()
+            except KeyError:
+                print("** no instance found **")
 
     def do_count(self, line):
         """
