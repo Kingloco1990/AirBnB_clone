@@ -247,7 +247,8 @@ class HBNBCommand(cmd.Cmd):
                 if len(args) == 2:
                     print("** attribute name missing **")
                 elif len(args) == 3:
-                    print("** value missing **")
+                    if eval(args[2]) != dict:
+                        print("** value missing **")
                 else:
                     try:
                         # Convert the attribute (fourth argument) value to
