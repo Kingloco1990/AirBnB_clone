@@ -255,15 +255,12 @@ class HBNBCommand(cmd.Cmd):
             except (SyntaxError):
                 print("** value missing **")
         else:
-            obj = objs_dict[key]
-            try:
-                # Convert the attribute (fourth argument) value to
-                # the appropriate data type
-                eval(args[3])
-            except (SyntaxError, NameError):
-                args[3] = "'{}'".format(args[3])
-                setattr(obj, args[2], eval(args[3]))
-                obj.save()
+            if len(args) == 4:
+                obj = objs_dict[key]
+                if args[2] in obj.__class__.__dict__.keys():
+                    result = eval(args[2])
+                    setattr(obj, args[2], result)
+            obj.save()
 
     def do_count(self, line):
         """
