@@ -18,6 +18,12 @@ from models.review import Review
 def parse(line):
     """Parses an input string, and returns a list of tokens
        based on shell-like syntax.
+
+    Args:
+        line (str): The input string to be parsed.
+
+    Returns:
+        list: A list of parsed tokens.
     """
     curly_braces = re.search(r"\{(.*?)\}", line)
     square_brackets = re.search(r"\[(.*?)\]", line)
@@ -41,17 +47,17 @@ class HBNBCommand(cmd.Cmd):
     Methods:
         do_quit(self, arg): Exit the command interpreter.
         do_EOF(self, arg): Handle the EOF signal to exit the program.
-        do_count(self, line): Count the number of words in a given line.
         do_create(self, line): Create a new instance of BaseModel,
                                save it to the JSON file, and print its id.
         do_show(self, line): Print the string representation of an instance
                              based on the class name and id.
-        do_destroy(self, line): Delete an instance based on the
-                                class name and id.
+        do_destroy(self, line): Delete an instance based on the class name and
+                                id.
         do_all(self, line): Print string representations of all instances
                             based on the class name or all instances.
         do_update(self, line): Update an instance based on the class name and
                                id by adding or updating an attribute.
+        do_count(self, line): Count the number of words in a given line.
     """
     prompt = "(hbnb) "
     classes = [
@@ -116,6 +122,9 @@ class HBNBCommand(cmd.Cmd):
         """
         Create a new instance of BaseModel, save it to the JSON file,
         and print its id.
+        
+        Args:
+            line (str): The input line provided by the user.
 
         Usage: create <class name> or
                create <class name> <key 1>=<value 2> <key 2>=<value 2> ...
@@ -134,6 +143,9 @@ class HBNBCommand(cmd.Cmd):
         """
         Prints the string representation of an instance based
         on the class name and id.
+
+        Args:
+            line (str): The input line provided by the user.
 
         Usage: show <class name> <id> or <class name>.show(<id>)
         """
@@ -156,6 +168,9 @@ class HBNBCommand(cmd.Cmd):
     def do_destroy(self, line):
         """
         Deletes an instance based on the class name and id.
+
+        Args:
+            line (str): The input line provided by the user.
 
         Usage: destroy <class name> <id> or <class name>.destroy(<id>)
         """
@@ -183,6 +198,9 @@ class HBNBCommand(cmd.Cmd):
         class name. When class name is not specified, it prints all
         instantiated objects.
 
+        Args:
+            line (str): The input line provided by the user.
+
         Usage: all or all <class name> or <class name>.all()
         """
         objs_dict = models.storage.all()
@@ -205,6 +223,9 @@ class HBNBCommand(cmd.Cmd):
         """
         Updates an instance based on the class name and id by adding
         or updating an attribute.
+
+        Args:
+            line (str): The input line provided by the user.        
 
         usage: update <class name> <id> <attribute name> "<attribute value>"
                or
@@ -242,8 +263,6 @@ class HBNBCommand(cmd.Cmd):
                         print("** value missing **")
                 else:
                     try:
-                        # Convert the attribute (fourth argument) value to
-                        # the appropriate data type
                         eval(args[3])
                     except (SyntaxError, NameError):
                         args[3] = "'{}'".format(args[3])
@@ -255,6 +274,9 @@ class HBNBCommand(cmd.Cmd):
     def do_count(self, line):
         """
         Retrieves the number of instances of a given class.
+
+        Args:
+            line (str): The input line provided by the user.
 
         Usage: <class name>.count()
         """
