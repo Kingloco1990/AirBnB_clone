@@ -5,6 +5,7 @@
     width: 100%;
     border: 1px solid #DDDDDD;
     border-radius: 4px;
+    position: relative;
 }
 
 /* Search button style */
@@ -16,10 +17,11 @@
     width: 20%;
     border: none;
     border-radius: 4px;
-    float: right;
-    margin-top: 11px;
-    margin-bottom: 11px; 
-    margin-right: 30px;
+    top: 11px;
+    bottom: 11px;
+    right: 30px;
+
+    position: absolute;
 }
 
 /* Style for opacity when the mouse is on the button */
